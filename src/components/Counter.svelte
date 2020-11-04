@@ -6,29 +6,10 @@
 	};
 </script>
 
-<button on:click={increment}>
+<button on:click={increment} type="button" class="inline-flex items-center px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition ease-in-out duration-150">
+	Button text
 	Clicks: {count}
 </button>
 
 <style>
-	button {
-		font-family: inherit;
-		font-size: inherit;
-		padding: 1em 2em;
-		color: #ff3e00;
-		background-color: rgba(255, 62, 0, 0.1);
-		border-radius: 2em;
-		border: 2px solid rgba(255, 62, 0, 0);
-		outline: none;
-		width: 200px;
-		font-variant-numeric: tabular-nums;
-	}
-
-	button:focus {
-		border: 2px solid #ff3e00;
-	}
-
-	button:active {
-		background-color: rgba(255, 62, 0, 0.2);
-	}
 </style>
