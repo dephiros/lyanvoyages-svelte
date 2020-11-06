@@ -1,7 +1,9 @@
 <script>
 	import Counter from '$components/Counter.svelte';
+	import Editor from '$components/editor';
 </script>
 
+<Editor />
 <main class="text-center p-4 mx-0 my-auto">
 	<h1 class="text-red-600">Hello world!</h1>
 
