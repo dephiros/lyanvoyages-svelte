@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
 
+  import { history } from "prosemirror-history";
   import { baseKeymap } from "prosemirror-commands";
   import { dropCursor } from "prosemirror-dropcursor";
   import { gapCursor } from "prosemirror-gapcursor";
@@ -36,7 +37,8 @@
           keymap(buildKeymap(schema), null),
           keymap(baseKeymap),
           dropCursor(),
-          gapCursor()
+          gapCursor(),
+          history()
         ]
       })
     });
