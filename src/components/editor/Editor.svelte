@@ -5,7 +5,7 @@
   import { baseKeymap } from "prosemirror-commands";
   import { dropCursor } from "prosemirror-dropcursor";
   import { gapCursor } from "prosemirror-gapcursor";
-  import { EditorState } from "prosemirror-state";
+  import { EditorState, Plugin } from "prosemirror-state";
   import { EditorView } from "prosemirror-view";
   import { keymap } from "prosemirror-keymap";
   import { Schema, DOMParser } from "prosemirror-model";
@@ -38,7 +38,13 @@
           keymap(baseKeymap),
           dropCursor(),
           gapCursor(),
-          history()
+          history(),
+          new Plugin({
+            // add class and author attributes to ContentEditable
+            props: {
+              attributes: { class: "prose prose-lg" }
+            }
+          })
         ]
       })
     });
