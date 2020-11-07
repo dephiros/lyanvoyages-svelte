@@ -2,6 +2,8 @@
   import { onMount } from "svelte";
 
   import { baseKeymap } from "prosemirror-commands";
+  import { dropCursor } from "prosemirror-dropcursor";
+  import { gapCursor } from "prosemirror-gapcursor";
   import { EditorState } from "prosemirror-state";
   import { EditorView } from "prosemirror-view";
   import { keymap } from "prosemirror-keymap";
@@ -30,7 +32,12 @@
         doc: DOMParser.fromSchema(schema).parse(
           document.querySelector("#content")
         ),
-        plugins: [keymap(buildKeymap(schema), null), keymap(baseKeymap)]
+        plugins: [
+          keymap(buildKeymap(schema), null),
+          keymap(baseKeymap),
+          dropCursor(),
+          gapCursor()
+        ]
       })
     });
   });
