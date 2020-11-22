@@ -35,16 +35,21 @@
   const store = {
     EDITOR_STATE: "editor_state",
     get state() {
-      return JSON.parse(getLocalStorage().getItem(this.EDITOR_STATE));
+      try {
+        const stateStr = getLocalStorage().getItem(this.EDITOR_STATE);
+        return stateStr && JSON.parse(stateStr);
+      } catch (e) {
+        return null;
+      }
     },
     set state(state) {
-      this._storage.setItem(this.EDITOR_STATE, JSON.stringify(state));
+      getLocalStorage().setItem(this.EDITOR_STATE, JSON.stringify(state));
     }
   };
 
   onMount(() => {
     const schema = new Schema({
-      nodes: addListNodes(basicSchema.spec.nodes, "paragraph block*", "block"),
+      nodes: addListNodes(basicSchema.spec.nodes as any, "paragraph block*", "block"),
       marks: basicSchema.spec.marks
     });
     const plugins = [
@@ -70,6 +75,7 @@
               JSON.stringify(state)
             );
             store.state = state;
+            return false;
           }
         }
       })
