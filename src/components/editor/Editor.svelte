@@ -21,6 +21,7 @@
   const isClient = () => typeof window !== undefined;
   const getLocalStorage = () => {
     if (isClient) {
+      console.log('hello')
       return window.localStorage;
     }
     return {
@@ -33,9 +34,8 @@
   // See https://github.com/ProseMirror/prosemirror-example-setup/blob/90e380f3640dcf9c5961b0285d47012ccf3d640b/src/inputrules.js#L23
   const store = {
     EDITOR_STATE: "editor_state",
-    _storage: getLocalStorage(),
     get state() {
-      return JSON.parse(this._storage.getItem(this.EDITOR_STATE));
+      return JSON.parse(getLocalStorage().getItem(this.EDITOR_STATE));
     },
     set state(state) {
       this._storage.setItem(this.EDITOR_STATE, JSON.stringify(state));
