@@ -1,6 +1,20 @@
-<script>
+<script type='ts'>
+  import { onMount } from 'svelte';
   import Counter from "$components/Counter.svelte";
   import Editor from "$components/editor";
+  import { initServer } from '$components/mirage';
+
+  let blogPosts = [];
+
+  onMount(async () => {
+    initServer();
+    const response = await fetch('/api/blog-post');
+    const body = await response.json();
+    blogPosts = body.blogPosts;
+  });
+
+  
+
 </script>
 
 <style>
@@ -17,4 +31,8 @@
     to learn how to build Svelte apps.
   </p>
   <div id="content" />
+  <h2>Blog Post</h2>
+  {#each blogPosts as blogPost}
+    {@html blogPost.html}
+  {/each}
 </main>
