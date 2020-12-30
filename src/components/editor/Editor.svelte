@@ -23,7 +23,7 @@
   const editorStore = getEditorStore("/blog-posts/test", "content");
 
   onMount(() => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
     // TODO: set up inputrules to enable typing ```
     // See https://github.com/ProseMirror/prosemirror-example-setup/blob/90e380f3640dcf9c5961b0285d47012ccf3d640b/src/inputrules.js#L23
     const schema = new Schema({

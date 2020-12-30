@@ -8,7 +8,7 @@ import {
   setBlockType,
   toggleMark,
   wrapIn,
-  Command
+  Command,
 } from "prosemirror-commands";
 import { redo, undo } from "prosemirror-history";
 import { undoInputRule } from "prosemirror-inputrules";

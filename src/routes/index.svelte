@@ -1,20 +1,17 @@
-<script type='ts'>
-  import { onMount } from 'svelte';
+<script type="ts">
+  import { onMount } from "svelte";
   import Counter from "$components/Counter.svelte";
   import Editor from "$components/editor";
-  import { initServer } from '$components/mirage';
+  import { initServer } from "$components/mirage";
 
   let blogPosts = [];
 
   onMount(async () => {
     initServer();
-    const response = await fetch('/api/blog-posts');
+    const response = await fetch("/api/blog-posts");
     const body = await response.json();
     blogPosts = body.blogPosts;
   });
-
-  
-
 </script>
 
 <style>

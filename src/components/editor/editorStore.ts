@@ -26,18 +26,17 @@ function createEditorStore(pageId: string, id: string) {
     try {
       const response = await fetch(`/api${pageId}`);
       set((await response.json())[id] || {});
-
     } catch (e) {
       console.log(e);
     }
-  }
+  };
   const save = (content: any) => {
     fetch(`/api${pageId}`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({[id]: content})
+      body: JSON.stringify({ [id]: content }),
     });
   };
 
