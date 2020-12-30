@@ -8,7 +8,7 @@
 
   onMount(async () => {
     initServer();
-    const response = await fetch('/api/blog-post');
+    const response = await fetch('/api/blog-posts');
     const body = await response.json();
     blogPosts = body.blogPosts;
   });
@@ -30,7 +30,11 @@
     <a href="https://svelte.dev">svelte.dev</a>
     to learn how to build Svelte apps.
   </p>
-  <div id="content" />
+  <div id="content">
+    {#if blogPosts.length}
+      {@html blogPosts[0].html}
+    {/if}
+  </div>
   <h2>Blog Post</h2>
   {#each blogPosts as blogPost}
     {@html blogPost.html}

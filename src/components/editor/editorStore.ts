@@ -21,21 +21,27 @@ const getLocalStorage = () => {
 export type PageContent = { editorState?: any };
 
 function createEditorStore(pageId: string, id: string) {
-  const getPageContent = () => {
+  const { subscribe, set, update } = writable("");
+  const getPageContent = async () => {
     try {
-      const stateStr = getLocalStorage().getItem(pageId);
-      return stateStr ? JSON.parse(stateStr) : {};
-    } catch (e) {}
-    return {};
+      const response = await fetch(`/api${pageId}`);
+      set((await response.json())[id] || {});
+
+    } catch (e) {
+      console.log(e);
+    }
   }
-  const save = (editorState: any) => {
-    const pageContent = getLocalStorage().getItem(pageId);
-    getLocalStorage().setItem(
-      pageId,
-      JSON.stringify({ ...getPageContent(), [id]: editorState })
-    );
+  const save = (content: any) => {
+    fetch(`/api${pageId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({[id]: content})
+    });
   };
-  const { subscribe, set, update } = writable(getPageContent()[id]);
+
+  getPageContent();
 
   return {
     subscribe,

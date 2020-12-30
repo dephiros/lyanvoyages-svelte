@@ -19,12 +19,17 @@ export function initServer () {
         html: () => {
           return faker.fake(`<p>{{lorem.paragraph}}</p>`);
         },
+        slug: () => {
+          return faker.lorem.slug()
+        }
       }),
     },
     routes() {
-      this.get("/api/blog-post", (schema) => schema.blogPosts.all());
+      this.get("/api/blog-posts", (schema) => schema.blogPosts.all());
+      this.get('/api/blog-posts/:id', (schema, request) => schema.blogPosts.findBy({slug: request.params.id}))
     },
     seeds(server) {
+      server.create('blogPost', { slug: 'test'})
       server.createList("blogPost", 10);
     } 
   });

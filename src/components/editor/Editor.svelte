@@ -20,9 +20,10 @@
   export let contentEl: HTMLElement;
   let editorElement;
   let editorView;
-  const editorStore = getEditorStore("/", "content");
+  const editorStore = getEditorStore("/blog-posts/test", "content");
 
   onMount(() => {
+    if (typeof window === 'undefined') return;
     // TODO: set up inputrules to enable typing ```
     // See https://github.com/ProseMirror/prosemirror-example-setup/blob/90e380f3640dcf9c5961b0285d47012ccf3d640b/src/inputrules.js#L23
     const schema = new Schema({
@@ -55,8 +56,8 @@
                 state:`,
               JSON.stringify(state)
             );
-            editorStore.setAndSave(state);
-            // false will let the editor continue editing 
+            editorStore.setAndSave({ editor: state });
+            // false will let the editor continue editing
             return false;
           },
         },
@@ -69,8 +70,12 @@
       //   ),
       //   plugins
       // })
-      state: $editorStore
-        ? EditorState.fromJSON({ schema, plugins }, $editorStore)
+      state: $editorStore.editor
+        ? EditorState.fromJSON({ schema, plugins }, $editorStore.editor)
+        : $editorStore.html
+        ? EditorState.create({
+            doc: DOMParser.fromSchema(schema).parse($editorStore.html),
+          })
         : EditorState.create({ schema, plugins }),
     });
   });
