@@ -24,8 +24,10 @@ function createEditorStore(pageId: string, id: string) {
   const { subscribe, set, update } = writable("");
   const getPageContent = async () => {
     try {
-      const response = await fetch(`/api${pageId}`);
-      set((await response.json())[id] || {});
+      const url = `/api/${pageId}`;
+      const response = await fetch(url);
+      const data = await response.json();
+      set(data.blogPost || {});
     } catch (e) {
       console.log(e);
     }
@@ -40,9 +42,9 @@ function createEditorStore(pageId: string, id: string) {
     });
   };
 
-  getPageContent();
 
   return {
+    initialized: getPageContent(),
     subscribe,
     setAndSave(editorState: any) {
       set(editorState);

@@ -23,11 +23,12 @@
   // need to be declared at top level
   let editorStore = null;
 
-  onMount(() => {
+  onMount(async () => {
     if (typeof window === "undefined") return;
     // TODO: set up inputrules to enable typing ```
     // See https://github.com/ProseMirror/prosemirror-example-setup/blob/90e380f3640dcf9c5961b0285d47012ccf3d640b/src/inputrules.js#L23
-    editorStore = getEditorStore("/blog-posts/test", "content");
+    editorStore = getEditorStore("blog-posts/test", "content");
+    await editorStore.initialized;
     const schema = new Schema({
       nodes: addListNodes(
         basicSchema.spec.nodes as any,
@@ -76,7 +77,8 @@
         ? EditorState.fromJSON({ schema, plugins }, $editorStore.editor)
         : $editorStore.html
         ? EditorState.create({
-            doc: DOMParser.fromSchema(schema).parse($editorStore.html),
+            doc: DOMParser.fromSchema(schema).parse(document.createRange().createContextualFragment($editorStore.html)),
+            plugins
           })
         : EditorState.create({ schema, plugins }),
     });
