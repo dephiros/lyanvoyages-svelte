@@ -15,35 +15,44 @@ export function initServer() {
     // TODO figure serializer for file
     models: {
       file: Model,
-      directory: Model,
       tag: Model,
-    },
-    identityManagers: {
-      // TODO implement an identify manager https://miragejs.com/docs/advanced/mocking-guids/
-      // do we need to or can we just override id?
     },
     factories: {
       file: Factory.extend({
-        blogPost: trait({
-          html: () => {
-            return faker.fake(`<p>{{lorem.paragraph}}</p>`);
-          },
-          slug: () => {
-            return faker.lorem.slug();
-          },
-          id: () => {
-            return `blog-post/${this.slug}`
-          }
+        directory: trait({
+          type: "directory"
         }),
-      }),
+        file: trait({
+          type: "file"
+        }),
+        slug: () => {
+          return faker.lorem.slug();
+        },
+        blogPost: trait({
+          "content": () => ( {
+            "#content": {
+              html: faker.fake(`<p>{{lorem.paragraph}}</p>`)
+            }
+          } )
+        }),
+      })
     },
     routes() {
-      // TODO create endpoint for file and directory here
+      this.get("/api/:id", (schema, request) => {
+        return schema.files.findBy({ slug: request.params.id })
+      });
       // TODO endpoint for creating a file
-      this.get("/api/blog-posts", (schema) => schema.blogPosts.all());
-      this.get("/api/blog-posts/:id", (schema, request) =>
-        schema.blogPosts.findBy({ slug: request.params.id })
-      );
+      this.post("api/:id", (schema, request) => {
+        const { content } = JSON.parse(request.requestBody)
+        const path = request.params.id;
+        const parts = path.split("/");
+        const name = parts.pop();
+        const dir = [""].concat(parts).join('/');
+        const newFile = schema.files.create({id: request.params.id, content});
+        const directory = schema.files.findOrCreateBy({ id: dir});
+        directory.children[name] = { id: path };
+        return newFile;
+      },
     },
     seeds(server) {
       // TODO add seed for file and directory here. We can even create directory using after create
